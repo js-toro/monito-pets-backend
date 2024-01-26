@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace monito_pets_backend.Controllers
+namespace MonitoPetsBackend.Controllers
 {
     [ApiController]
     [Route("[controller]")]

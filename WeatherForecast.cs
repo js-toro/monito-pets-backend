@@ -1,4 +1,4 @@
-namespace monito_pets_backend
+namespace MonitoPetsBackend
 {
     public class WeatherForecast
     {
