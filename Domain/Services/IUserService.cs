@@ -1,8 +1,8 @@
 ﻿using MonitoPetsBackend.Domain.Entities;
 
-namespace MonitoPetsBackend.Domain.Interfaces
+namespace MonitoPetsBackend.Domain.Services
 {
-    public interface IUserRepository
+    public interface IUserService
     {
         Task<User> GetUserById(int id);
         Task<List<User>> GetUsersByName(string name);

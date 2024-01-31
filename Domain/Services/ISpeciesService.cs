@@ -1,8 +1,8 @@
 ﻿using MonitoPetsBackend.Domain.Entities;
 
-namespace MonitoPetsBackend.Domain.Interfaces
+namespace MonitoPetsBackend.Domain.Services
 {
-    public interface ISpeciesRepository
+    public interface ISpeciesService
     {
         Task<Species> GetSpeciesById(int id);
         Task<List<Species>> GetAllSpecies();

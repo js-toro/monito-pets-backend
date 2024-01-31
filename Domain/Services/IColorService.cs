@@ -1,8 +1,8 @@
 ﻿using MonitoPetsBackend.Domain.Entities;
 
-namespace MonitoPetsBackend.Domain.Interfaces
+namespace MonitoPetsBackend.Domain.Services
 {
-    public interface IColorRepository
+    public interface IColorService
     {
         Task<Color> GetColorById(int id);
         Task<List<Color>> GetColorsByName(string name);

@@ -1,8 +1,8 @@
 ﻿using MonitoPetsBackend.Domain.Entities;
 
-namespace MonitoPetsBackend.Domain.Interfaces
+namespace MonitoPetsBackend.Domain.Services
 {
-    public interface IPetImageRepository
+    public interface IPetImageService
     {
         Task<PetImage> GetPetImageById(int id);
         Task<List<PetImage>> GetPetImagesByPetId(int id);

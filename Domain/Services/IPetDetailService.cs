@@ -1,8 +1,8 @@
 ﻿using MonitoPetsBackend.Domain.Entities;
 
-namespace MonitoPetsBackend.Domain.Interfaces
+namespace MonitoPetsBackend.Domain.Services
 {
-    public interface IPetDetailRepository
+    public interface IPetDetailService
     {
         Task<PetDetail> GetPetDetailById(int id);
         Task<List<PetDetail>> GetPetDetailsByPriceRange(decimal min, decimal max);
