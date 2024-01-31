@@ -8,6 +8,6 @@ namespace MonitoPetsBackend.Domain.Entities
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
         public bool IsActive { get; set; }
-        public HashSet<Pet> Pets { get; set; } = new HashSet<Pet>();
+        public List<Pet> Pets { get; set; } = new List<Pet>();
     }
 }

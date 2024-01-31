@@ -7,6 +7,6 @@ namespace MonitoPetsBackend.Domain.Entities
         public string Name { get; set; } = null!;
         public int SpeciesId { get; set; }
         public Species Species { get; set; } = null!;
-        public HashSet<Pet> Pets { get; set; } = new HashSet<Pet>();
+        public List<Pet> Pets { get; set; } = new List<Pet>();
     }
 }

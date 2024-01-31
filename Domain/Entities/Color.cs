@@ -5,6 +5,6 @@ namespace MonitoPetsBackend.Domain.Entities
     public class Color : BaseEntity
     {
         public string Name { get; set; } = null!;
-        public HashSet<Pet> Pets { get; set; } = new HashSet<Pet>();
+        public List<Pet> Pets { get; set; } = new List<Pet>();
     }
 }
