@@ -3,7 +3,7 @@ using MonitoPetsBackend.Domain.Enums;
 
 namespace MonitoPetsBackend.Domain.Entities
 {
-    public class Pet : BaseAuditableEntity
+    public class Pet : AuditableEntityBase
     {
         public string Label { get; set; } = null!;
         public HashSet<PetImage> PetImages { get; set; } = new HashSet<PetImage>();

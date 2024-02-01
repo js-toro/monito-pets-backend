@@ -2,7 +2,7 @@
 
 namespace MonitoPetsBackend.Domain.Entities
 {
-    public class PetStatistic : BaseAuditableEntity
+    public class PetStatistic : AuditableEntityBase
     {
         public int Views { get; set; }
         public int Likes { get; set; }

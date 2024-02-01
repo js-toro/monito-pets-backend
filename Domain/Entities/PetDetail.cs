@@ -2,7 +2,7 @@
 
 namespace MonitoPetsBackend.Domain.Entities
 {
-    public class PetDetail : BaseAuditableEntity
+    public class PetDetail : AuditableEntityBase
     {
         public decimal Price { get; set; }
         public bool? IsVaccinated { get; set; }

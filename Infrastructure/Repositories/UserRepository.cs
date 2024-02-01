@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MonitoPetsBackend.Infrastructure.Interfaces;
 using MonitoPetsBackend.Domain.Entities;
 using MonitoPetsBackend.Domain.Interfaces;
+using MonitoPetsBackend.Infrastructure.Attributes;
+using MonitoPetsBackend.Infrastructure.Interfaces;
 
-namespace MonitoPetsBackend.Application.Repositories
+namespace MonitoPetsBackend.Infrastructure.Repositories
 {
+    [ScopedRegistration]
     public class UserRepository : IUserRepository
     {
         private readonly IApplicationDbContext _context;

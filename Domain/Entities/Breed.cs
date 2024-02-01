@@ -2,7 +2,7 @@
 
 namespace MonitoPetsBackend.Domain.Entities
 {
-    public class Breed : BaseEntity
+    public class Breed : EntityBase
     {
         public string Name { get; set; } = null!;
         public int SpeciesId { get; set; }

@@ -2,7 +2,7 @@
 
 namespace MonitoPetsBackend.Domain.Entities
 {
-    public class PetImage : BaseAuditableEntity
+    public class PetImage : AuditableEntityBase
     {
         public string Url { get; set; } = null!;
         public bool IsMain { get; set; }

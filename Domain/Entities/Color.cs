@@ -2,7 +2,7 @@
 
 namespace MonitoPetsBackend.Domain.Entities
 {
-    public class Color : BaseEntity
+    public class Color : EntityBase
     {
         public string Name { get; set; } = null!;
         public List<Pet> Pets { get; set; } = new List<Pet>();

@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MonitoPetsBackend.Domain.Entities;
+using MonitoPetsBackend.Infrastructure.Attributes;
 using MonitoPetsBackend.Infrastructure.Interfaces;
 using System.Reflection;
 
 namespace MonitoPetsBackend.Infrastructure.Data
 {
+    [SingletonRegistration]
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         public DbSet<Color> Colors => Set<Color>();

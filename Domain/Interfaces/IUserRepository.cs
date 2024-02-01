@@ -1,4 +1,5 @@
-﻿using MonitoPetsBackend.Domain.Entities;
+﻿using MonitoPetsBackend.Domain.Common;
+using MonitoPetsBackend.Domain.Entities;
 
 namespace MonitoPetsBackend.Domain.Interfaces
 {

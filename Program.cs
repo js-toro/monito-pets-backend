@@ -1,25 +1,19 @@
 using Microsoft.EntityFrameworkCore;
-using MonitoPetsBackend.Application.Repositories;
-using MonitoPetsBackend.Domain.Interfaces;
-using MonitoPetsBackend.Domain.Services;
+using MonitoPetsBackend.Infrastructure;
 using MonitoPetsBackend.Infrastructure.Data;
-using MonitoPetsBackend.Infrastructure.Interfaces;
-using MonitoPetsBackend.Infrastructure.Services;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer("name=DefaultConnection");
 });
 
-builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddInfrastructureServices();
 
 var app = builder.Build();
 

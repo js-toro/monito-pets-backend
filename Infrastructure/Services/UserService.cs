@@ -1,9 +1,11 @@
 ﻿using MonitoPetsBackend.Domain.Entities;
 using MonitoPetsBackend.Domain.Interfaces;
 using MonitoPetsBackend.Domain.Services;
+using MonitoPetsBackend.Infrastructure.Attributes;
 
 namespace MonitoPetsBackend.Infrastructure.Services
 {
+    [ScopedRegistration]
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;

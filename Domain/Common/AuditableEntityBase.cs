@@ -1,6 +1,6 @@
 ﻿namespace MonitoPetsBackend.Domain.Common
 {
-    public class BaseAuditableEntity : BaseEntity
+    public class AuditableEntityBase : EntityBase
     {
         public DateTimeOffset Created { get; set; }
         public string? CreatedBy { get; set; }
