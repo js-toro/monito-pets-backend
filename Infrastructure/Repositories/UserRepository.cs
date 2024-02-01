@@ -37,13 +37,15 @@ namespace MonitoPetsBackend.Application.Repositories
         public async Task<int> CreateUser(User user)
         {
             await _context.Users.AddAsync(user);
-            return await _context.SaveChangesAsync();
+            var alterRows = await _context.SaveChangesAsync();
+            return alterRows;
         }
 
-        public Task<int> UpdateUser(User user)
+        public async Task<int> UpdateUser(User user)
         {
             _context.Users.Update(user);
-            return _context.SaveChangesAsync();
+            var alterRows = await _context.SaveChangesAsync();
+            return alterRows;
         }
 
         public async Task<int> DeleteUser(int id)

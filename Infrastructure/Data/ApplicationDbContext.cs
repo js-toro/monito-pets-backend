@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MonitoPetsBackend.Domain.Entities;
 using MonitoPetsBackend.Infrastructure.Interfaces;
+using System.Reflection;
 
 namespace MonitoPetsBackend.Infrastructure.Data
 {
@@ -14,11 +15,13 @@ namespace MonitoPetsBackend.Infrastructure.Data
         public DbSet<PetImage> PetImages => Set<PetImage>();
         public DbSet<PetStatistic> PetStatistic => Set<PetStatistic>();
         public DbSet<User> Users => Set<User>();
-        public ApplicationDbContext(DbContextOptions options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public async Task<int> SaveChangesAsync() => await base.SaveChangesAsync();
