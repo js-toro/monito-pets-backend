@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MonitoPetsBackend.Domain.Entities;
-using MonitoPetsBackend.Infrastructure.Attributes;
-using MonitoPetsBackend.Infrastructure.Interfaces;
+using MonitoPetsBackend.Infrastructure.Common.Attributes;
+using MonitoPetsBackend.Infrastructure.Data.Interfaces;
+using MonitoPetsBackend.Infrastructure.Data.Seedings;
 using System.Reflection;
 
 namespace MonitoPetsBackend.Infrastructure.Data
 {
-    [SingletonRegistration]
+    [ScopedRegistration]
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         public DbSet<Color> Colors => Set<Color>();
@@ -22,6 +23,7 @@ namespace MonitoPetsBackend.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            InitialSeeding.SeedData(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }

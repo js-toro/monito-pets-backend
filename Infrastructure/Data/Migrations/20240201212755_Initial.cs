@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace MonitoPetsBackend.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
@@ -17,7 +19,7 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,7 +32,7 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,14 +45,10 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(360)", maxLength: 360, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,7 +61,7 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SpeciesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -83,19 +81,19 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Label = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Label = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     ColorId = table.Column<int>(type: "int", nullable: false),
                     BreedId = table.Column<int>(type: "int", nullable: false),
                     PetDetailId = table.Column<int>(type: "int", nullable: false),
                     PetStatisticId = table.Column<int>(type: "int", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "date", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Created = table.Column<DateTime>(type: "date", nullable: false),
+                    CreatedById = table.Column<int>(type: "int", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "date", nullable: false),
+                    LastModifiedById = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -113,6 +111,18 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Pets_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Pets_Users_LastModifiedById",
+                        column: x => x.LastModifiedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Pets_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
@@ -125,18 +135,17 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsVaccinated = table.Column<bool>(type: "bit", nullable: true),
                     IsDewormed = table.Column<bool>(type: "bit", nullable: true),
                     IsSterilized = table.Column<bool>(type: "bit", nullable: true),
                     HasMicrochip = table.Column<bool>(type: "bit", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AdditionalInfo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    AdditionalInfo = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     PetId = table.Column<int>(type: "int", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Created = table.Column<DateTime>(type: "date", nullable: false),
+                    CreatedById = table.Column<int>(type: "int", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "date", nullable: false),
+                    LastModifiedById = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,6 +156,18 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                         principalTable: "Pets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PetDetails_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PetDetails_Users_LastModifiedById",
+                        column: x => x.LastModifiedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,10 +179,10 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsMain = table.Column<bool>(type: "bit", nullable: false),
                     PetId = table.Column<int>(type: "int", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Created = table.Column<DateTime>(type: "date", nullable: false),
+                    CreatedById = table.Column<int>(type: "int", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "date", nullable: false),
+                    LastModifiedById = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -172,6 +193,18 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                         principalTable: "Pets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PetImages_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PetImages_Users_LastModifiedById",
+                        column: x => x.LastModifiedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,10 +216,10 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                     Views = table.Column<int>(type: "int", nullable: false),
                     Likes = table.Column<int>(type: "int", nullable: false),
                     PetId = table.Column<int>(type: "int", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Created = table.Column<DateTime>(type: "date", nullable: false),
+                    CreatedById = table.Column<int>(type: "int", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "date", nullable: false),
+                    LastModifiedById = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -197,6 +230,76 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                         principalTable: "Pets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PetStatistic_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PetStatistic_Users_LastModifiedById",
+                        column: x => x.LastModifiedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Colors",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Blanco" },
+                    { 2, "Negro Peceño" },
+                    { 3, "Negro Hito" },
+                    { 4, "Negro Azabache" },
+                    { 5, "Azul Oscuro" },
+                    { 6, "Caoba" },
+                    { 7, "Rojizo" },
+                    { 8, "Amarillo" },
+                    { 9, "Naranja" },
+                    { 10, "Café" },
+                    { 11, "Dorado" },
+                    { 12, "Chocolate" },
+                    { 13, "Atigrado" },
+                    { 14, "Moteado" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Species",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Gato" },
+                    { 2, "Perro" },
+                    { 3, "Ave" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "IsActive", "Name", "Password" },
+                values: new object[,]
+                {
+                    { 1, "admin@monito.pet", true, "Admin", "admin" },
+                    { 2, "common@monito.pet", true, "Common", "common" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Breeds",
+                columns: new[] { "Id", "Name", "SpeciesId" },
+                values: new object[,]
+                {
+                    { 1, "Persa", 1 },
+                    { 2, "Siamés", 1 },
+                    { 3, "Bengalí", 1 },
+                    { 4, "Criollo", 1 },
+                    { 5, "Boston Terrier", 2 },
+                    { 6, "Border Collie", 2 },
+                    { 7, "Bulldog", 2 },
+                    { 8, "Chihuahua", 2 },
+                    { 9, "Canario", 3 },
+                    { 10, "Periquito", 3 },
+                    { 11, "Loro", 3 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -205,10 +308,30 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                 column: "SpeciesId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PetDetails_CreatedById",
+                table: "PetDetails",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PetDetails_LastModifiedById",
+                table: "PetDetails",
+                column: "LastModifiedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PetDetails_PetId",
                 table: "PetDetails",
                 column: "PetId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PetImages_CreatedById",
+                table: "PetImages",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PetImages_LastModifiedById",
+                table: "PetImages",
+                column: "LastModifiedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PetImages_PetId",
@@ -226,9 +349,29 @@ namespace MonitoPetsBackend.Infrastructure.Data.Migrations
                 column: "ColorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Pets_CreatedById",
+                table: "Pets",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pets_LastModifiedById",
+                table: "Pets",
+                column: "LastModifiedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pets_UserId",
                 table: "Pets",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PetStatistic_CreatedById",
+                table: "PetStatistic",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PetStatistic_LastModifiedById",
+                table: "PetStatistic",
+                column: "LastModifiedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PetStatistic_PetId",

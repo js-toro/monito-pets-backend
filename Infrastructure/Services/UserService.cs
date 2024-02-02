@@ -1,7 +1,9 @@
 ﻿using MonitoPetsBackend.Domain.Entities;
 using MonitoPetsBackend.Domain.Interfaces;
 using MonitoPetsBackend.Domain.Services;
-using MonitoPetsBackend.Infrastructure.Attributes;
+using MonitoPetsBackend.Infrastructure.Common.Attributes;
+using MonitoPetsBackend.Infrastructure.Common.Exceptions;
+using System.Net;
 
 namespace MonitoPetsBackend.Infrastructure.Services
 {
@@ -15,38 +17,106 @@ namespace MonitoPetsBackend.Infrastructure.Services
             _userRepository = userRepository;
         }
 
-        public async Task<User> GetUserById(int id)
+        public async Task<IEnumerable<User>> GetAllUsers()
         {
-            return await _userRepository.GetUserById(id);
+            var users = await _userRepository.GetAllUsers();
+
+            if (users is null)
+            {
+                throw new ValidationException("No users found", HttpStatusCode.NotFound);
+            }
+
+            return users;
         }
 
-        public async Task<List<User>> GetUsersByName(string name)
+        public async Task<IEnumerable<User>> GetUsersByName(string name)
         {
-            return await _userRepository.GetUsersByName(name);
+            var users = await _userRepository.GetUsersByName(name);
+
+            if (users is null)
+            {
+                throw new ValidationException("No users found", HttpStatusCode.NotFound);
+            }
+
+            return users;
         }
 
-        public async Task<List<User>> GetUsersByState(bool isActive)
+        public async Task<IEnumerable<User>> GetUsersBtState(bool isActive)
         {
-            return await _userRepository.GetUsersByState(isActive);
+            var users = await _userRepository.GetUsersBtState(isActive);
+
+            if (users is null)
+            {
+                throw new ValidationException("No users found", HttpStatusCode.NotFound);
+            }
+
+            return users;
         }
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<User?> GetUserById(int id)
         {
-            return await _userRepository.GetAllUsers();
+            var user = await _userRepository.GetUserById(id);
+
+            if (user is null)
+            {
+                throw new ValidationException("User not found", HttpStatusCode.NotFound);
+            }
+
+            return user;
         }
 
-        public async Task<int> CreateUser(User user)
+        public async Task<User?> GetUserByEmail(string email)
         {
-            return await _userRepository.CreateUser(user);
+            var user = await _userRepository.GetUserByEmail(email);
+
+            if (user is null)
+            {
+                throw new ValidationException("User not found", HttpStatusCode.NotFound);
+            }
+
+            return await _userRepository.GetUserByEmail(email);
         }
 
-        public async Task<int> UpdateUser(User user)
+        public async Task<bool> CreateUser(User user)
         {
-            return await _userRepository.UpdateUser(user);
+            var userExists = await _userRepository.GetUserByEmail(user.Email);
+
+            if (userExists is not null)
+            {
+                throw new ValidationException("User already exists", HttpStatusCode.Conflict);
+            }
+
+            var result = await _userRepository.CreateUser(user);
+
+            if (!result)
+            {
+                throw new ValidationException("An error occurred while creating the user", HttpStatusCode.BadRequest);
+            }
+
+            return result;
         }
 
-        public async Task<int> DeleteUser(int id)
+        public async Task<bool> UpdateUser(User user)
         {
+            var result = await _userRepository.UpdateUser(user);
+
+            if (!result)
+            {
+                throw new ValidationException("An error occurred while updating the user", HttpStatusCode.BadRequest);
+            }
+
+            return result;
+        }
+
+        public async Task<bool> DeleteUser(int id)
+        {
+            var result = await _userRepository.DeleteUser(id);
+
+            if (!result)
+            {
+                throw new ValidationException("An error occurred while deleting the user", HttpStatusCode.BadRequest);
+            }
+
             return await _userRepository.DeleteUser(id);
         }
     }

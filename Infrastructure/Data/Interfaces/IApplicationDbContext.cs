@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MonitoPetsBackend.Domain.Entities;
 
-namespace MonitoPetsBackend.Infrastructure.Interfaces
+namespace MonitoPetsBackend.Infrastructure.Data.Interfaces
 {
     public interface IApplicationDbContext
     {

@@ -2,7 +2,7 @@
 
 namespace MonitoPetsBackend.Domain.Entities
 {
-    public class User : AuditableEntityBase
+    public class User : EntityBase
     {
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;

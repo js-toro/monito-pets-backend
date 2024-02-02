@@ -1,65 +1,150 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MonitoPetsBackend.Domain.Entities;
 using MonitoPetsBackend.Domain.Services;
-using MonitoPetsBackend.Presentation.DTOs;
+using MonitoPetsBackend.Infrastructure.Common.Exceptions;
+using MonitoPetsBackend.Presentation.DTOs.User;
+using System;
+using System.Net;
 
 namespace MonitoPetsBackend.Presentation.Controllers
 {
     [ApiController]
-    [Route("api/user")]
+    [Route("api/users")]
+    [Produces("application/json")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<UserResponseDTO>>> Get()
+        public async Task<ActionResult<IEnumerable<GetUserResponseDTO>>> GetAllUsers()
         {
-            var users = await _userService.GetAllUsers();
-
-            if (users is null)
+            try
             {
-                return NotFound();
+                var users = await _userService.GetAllUsers();
+                var data = _mapper.Map<IEnumerable<GetUserResponseDTO>>(users);
+                return Ok(data);
             }
-
-            var usersResponse = users.Select(user => new UserResponseDTO
+            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
             {
-                Id = user.Id,
-                Name = user.Name,
-                Email = user.Email,
-                Password = user.Password,
-                IsActive = user.IsActive
-            });
+                return NotFound(exception.Message);
+            }
+        }
 
-            return Ok(usersResponse);
+        [HttpGet("name")]
+        public async Task<ActionResult<IEnumerable<GetUserResponseDTO>>> GetUsersByName(string name)
+        {
+            try
+            {
+                var users = await _userService.GetUsersByName(name);
+                var data = _mapper.Map<IEnumerable<GetUserResponseDTO>>(users);
+                return Ok(data);
+            }
+            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
+            {
+                return NotFound(exception.Message);
+            }
+        }
+
+        [HttpGet("{isActive:bool}")]
+        public async Task<ActionResult<IEnumerable<GetUserResponseDTO>>> GetUsersBtState(bool isActive)
+        {
+            try
+            {
+                var users = await _userService.GetUsersBtState(isActive);
+                var data = _mapper.Map<IEnumerable<GetUserResponseDTO>>(users);
+                return Ok(data);
+            }
+            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
+            {
+                return NotFound(exception.Message);
+            }
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<GetUserResponseDTO>> GetUserById(int id)
+        {
+            try
+            {
+                var user = await _userService.GetUserById(id);
+                var data = _mapper.Map<GetUserResponseDTO>(user);
+                return Ok(data);
+            }
+            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
+            {
+                return NotFound(exception.Message);
+            }
+        }
+
+        [HttpGet("email")]
+        public async Task<ActionResult<GetUserResponseDTO>> GetUserByEmail(string email)
+        {
+            try
+            {
+                var user = await _userService.GetUserByEmail(email);
+                var data = _mapper.Map<GetUserResponseDTO>(user);
+                return Ok(data);
+            }
+            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
+            {
+                return NotFound(exception.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(UserRequestDTO user)
+        public async Task<ActionResult> CreateUser(CreateUserRequestDTO userDTO)
         {
-            if (user is null)
+            try
             {
-                return BadRequest();
+                var user = _mapper.Map<User>(userDTO);
+                await _userService.CreateUser(user);
+                return Ok();
             }
-
-            var alterRows = await _userService.CreateUser(new User
+            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.BadRequest)
             {
-                Name = user.Name,
-                Email = user.Email,
-                Password = user.Password,
-                IsActive = user.IsActive
-            });
-
-            if (alterRows == 0)
-            {
-                return BadRequest();
+                return BadRequest(exception.Message);
             }
+            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.Conflict)
+            {
+                return Conflict(exception.Message);
+            }
+        }
 
-            return Ok();
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> UpdateUser(int id, UpdateUserRequestDTO userDTO)
+        {
+            try
+            {
+                var user = _mapper.Map<User>(userDTO);
+                user.Id = id;
+                await _userService.UpdateUser(user);
+                return Ok();
+            }
+            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                await _userService.DeleteUser(id);
+                return Ok();
+            }
+            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return BadRequest(exception.Message);
+            }
         }
     }
 }

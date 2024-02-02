@@ -1,4 +1,4 @@
-﻿using MonitoPetsBackend.Infrastructure.Attributes;
+﻿using MonitoPetsBackend.Infrastructure.Common.Attributes;
 
 namespace MonitoPetsBackend.Infrastructure
 {

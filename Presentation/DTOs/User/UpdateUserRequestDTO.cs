@@ -1,7 +1,8 @@
-﻿namespace MonitoPetsBackend.Presentation.DTOs
+﻿namespace MonitoPetsBackend.Presentation.DTOs.User
 {
-    public class UserRequestDTO
+    public class UpdateUserRequestDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;

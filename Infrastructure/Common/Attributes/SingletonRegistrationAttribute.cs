@@ -1,4 +1,4 @@
-﻿namespace MonitoPetsBackend.Infrastructure.Attributes
+﻿namespace MonitoPetsBackend.Infrastructure.Common.Attributes
 {
     public class SingletonRegistrationAttribute : Attribute
     {

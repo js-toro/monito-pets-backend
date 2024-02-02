@@ -1,6 +1,6 @@
-﻿namespace MonitoPetsBackend.Presentation.DTOs
+﻿namespace MonitoPetsBackend.Presentation.DTOs.User
 {
-    public class UserResponseDTO
+    public class GetUserResponseDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;

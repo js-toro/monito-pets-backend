@@ -5,12 +5,13 @@ namespace MonitoPetsBackend.Domain.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User> GetUserById(int id);
-        Task<List<User>> GetUsersByName(string name);
-        Task<List<User>> GetUsersByState(bool isActive);
-        Task<List<User>> GetAllUsers();
-        Task<int> CreateUser(User user);
-        Task<int> UpdateUser(User user);
-        Task<int> DeleteUser(int id);
+        Task<IEnumerable<User>> GetAllUsers();
+        Task<IEnumerable<User>> GetUsersByName(string name);
+        Task<IEnumerable<User>> GetUsersBtState(bool isActive);
+        Task<User?> GetUserById(int id);
+        Task<User?> GetUserByEmail(string email);
+        Task<bool> CreateUser(User user);
+        Task<bool> UpdateUser(User user);
+        Task<bool> DeleteUser(int id);
     }
 }
