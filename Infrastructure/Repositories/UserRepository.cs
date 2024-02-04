@@ -43,7 +43,6 @@ namespace MonitoPetsBackend.Infrastructure.Repositories
 
         public async Task<bool> CreateUser(User user)
         {
-            user.IsActive = true;
             _context.Users.Add(user);
             return await _context.SaveChangesAsync() > 0;
         }
@@ -56,8 +55,7 @@ namespace MonitoPetsBackend.Infrastructure.Repositories
 
         public async Task<bool> DeleteUser(int id)
         {
-            var alterRows = await _context.Users.Where(x => x.Id == id).ExecuteDeleteAsync();
-            return alterRows > 0;
+            return await _context.Users.Where(x => x.Id == id).ExecuteDeleteAsync() > 0;
         }
     }
 }

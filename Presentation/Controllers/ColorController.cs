@@ -3,62 +3,32 @@ using Microsoft.AspNetCore.Mvc;
 using MonitoPetsBackend.Domain.Entities;
 using MonitoPetsBackend.Domain.Services;
 using MonitoPetsBackend.Infrastructure.Common.Exceptions;
-using MonitoPetsBackend.Presentation.DTOs.User;
+using MonitoPetsBackend.Presentation.DTOs.Color;
 using System.Net;
 
 namespace MonitoPetsBackend.Presentation.Controllers
 {
     [ApiController]
-    [Route("api/users")]
+    [Route("api/colors")]
     [Produces("application/json")]
-    public class UserController : ControllerBase
+    public class ColorController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IColorService _service;
         private readonly IMapper _mapper;
 
-        public UserController(IUserService userService, IMapper mapper)
+        public ColorController(IColorService service, IMapper mapper)
         {
-            _userService = userService;
+            _service = service;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetUserResponseDTO>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<GetColorResponseDTO>>> GetAllColors()
         {
             try
             {
-                var users = await _userService.GetAllUsers();
-                var response = _mapper.Map<IEnumerable<GetUserResponseDTO>>(users);
-                return Ok(response);
-            }
-            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
-            {
-                return NotFound(exception.Message);
-            }
-        }
-
-        [HttpGet("name")]
-        public async Task<ActionResult<IEnumerable<GetUserResponseDTO>>> GetUsersByName(string name)
-        {
-            try
-            {
-                var users = await _userService.GetUsersByName(name);
-                var response = _mapper.Map<IEnumerable<GetUserResponseDTO>>(users);
-                return Ok(response);
-            }
-            catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
-            {
-                return NotFound(exception.Message);
-            }
-        }
-
-        [HttpGet("{isActive:bool}")]
-        public async Task<ActionResult<IEnumerable<GetUserResponseDTO>>> GetUsersBtState(bool isActive)
-        {
-            try
-            {
-                var users = await _userService.GetUsersBtState(isActive);
-                var response = _mapper.Map<IEnumerable<GetUserResponseDTO>>(users);
+                var colors = await _service.GetAllColors();
+                var response = _mapper.Map<IEnumerable<GetColorResponseDTO>>(colors);
                 return Ok(response);
             }
             catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
@@ -68,12 +38,12 @@ namespace MonitoPetsBackend.Presentation.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<GetUserResponseDTO>> GetUserById(int id)
+        public async Task<ActionResult<GetColorResponseDTO>> GetColorById(int id)
         {
             try
             {
-                var user = await _userService.GetUserById(id);
-                var response = _mapper.Map<GetUserResponseDTO>(user);
+                var color = await _service.GetColorById(id);
+                var response = _mapper.Map<GetColorResponseDTO>(color);
                 return Ok(response);
             }
             catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
@@ -82,13 +52,13 @@ namespace MonitoPetsBackend.Presentation.Controllers
             }
         }
 
-        [HttpGet("email")]
-        public async Task<ActionResult<GetUserResponseDTO>> GetUserByEmail(string email)
+        [HttpGet("{name}")]
+        public async Task<ActionResult<GetColorResponseDTO>> GetColorByName(string name)
         {
             try
             {
-                var user = await _userService.GetUserByEmail(email);
-                var response = _mapper.Map<GetUserResponseDTO>(user);
+                var color = await _service.GetColorByName(name);
+                var response = _mapper.Map<GetColorResponseDTO>(color);
                 return Ok(response);
             }
             catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
@@ -98,13 +68,12 @@ namespace MonitoPetsBackend.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateUser(CreateUserRequestDTO request)
+        public async Task<ActionResult> CreateColor(CreateColorRequestDTO request)
         {
             try
             {
-                var user = _mapper.Map<User>(request);
-                user.IsActive = true;
-                await _userService.CreateUser(user);
+                var color = _mapper.Map<Color>(request);
+                await _service.CreateColor(color);
                 return Ok();
             }
             catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.BadRequest)
@@ -118,13 +87,13 @@ namespace MonitoPetsBackend.Presentation.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> UpdateUser(int id, UpdateUserRequestDTO request)
+        public async Task<ActionResult> UpdateColor(int id, UpdateColorRequestDTO request)
         {
             try
             {
-                var user = _mapper.Map<User>(request);
-                user.Id = id;
-                await _userService.UpdateUser(user);
+                var color = _mapper.Map<Color>(request);
+                color.Id = id;
+                await _service.UpdateColor(color);
                 return Ok();
             }
             catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.BadRequest)
@@ -138,11 +107,11 @@ namespace MonitoPetsBackend.Presentation.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeleteUser(int id)
+        public async Task<ActionResult> DeleteColor(int id)
         {
             try
             {
-                await _userService.DeleteUser(id);
+                await _service.DeleteColor(id);
                 return Ok();
             }
             catch (ValidationException exception) when (exception.StatusCode == HttpStatusCode.BadRequest)
